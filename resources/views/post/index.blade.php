@@ -6,7 +6,7 @@
                 {{ __('Latest Posts') }}
             </h1>
             <p class="mt-2 text-gray-600">
-                Discover stories, thinking, and expertise from writers on any topic.
+                 stories, thinking, and expertise from writers on any topic.
             </p>
         </div>
     </div>
