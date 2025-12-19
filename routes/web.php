@@ -11,7 +11,9 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::get('/', [PostController::class,'index'])->name('dashboard');
+Route::get('/', [PostController::class,'index'])
+    ->middleware(['auth', 'verified']) // <--- Add this
+    ->name('dashboard');
 
 
 Route::get('/@{user:username}',[PublicProfileController::class,'show'])->name('profile.show');
@@ -21,7 +23,7 @@ Route::get('/@{username}/{post:slug}',[PostController::class,'show'])->name('pos
 // POST, GUEST & USER ETC (Authenticated actions)
 Route::middleware(['auth','verified']) ->group(function () {
     
-   
+   Route::get('/', [PostController::class,'index'])->name('dashboard');
 
     Route::get('/post/create', [PostController::class,'create'])->name('post.create');
     Route::post('/post/create', [PostController::class,'store'])->name('post.store');
