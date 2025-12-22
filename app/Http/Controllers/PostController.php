@@ -15,11 +15,14 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+   public function index()
     {
-       
        $categories = Category::all();
-        $postsQuery = Post::orderBy('created_at', 'DESC');
+       
+       // NEW: Fetch the top 5 latest posts for the carousel
+       $carouselPosts = Post::orderBy('created_at', 'DESC')->take(5)->get();
+
+       $postsQuery = Post::orderBy('created_at', 'DESC');
 
         if (request('category')) {
              $postsQuery->where('category_id', request('category'));
@@ -27,9 +30,12 @@ class PostController extends Controller
         $posts = $postsQuery->simplePaginate(5);
         
         $posts->appends(request()->query());
+        
+        // Pass carouselPosts to the view
         return view('post.index', [
             'posts' => $posts,
-            'categories' => $categories
+            'categories' => $categories,
+            'carouselPosts' => $carouselPosts
         ]);
     }
 
@@ -100,7 +106,7 @@ class PostController extends Controller
         return redirect()->route('profile.show', ['user' => Auth::user()->username])
                          ->with('status', 'Post updated!');
     }
-   public function destroy(Post $post)
+    public function destroy(Post $post)
     {
         if (Auth::id() !== $post->user_id) {
             abort(403);

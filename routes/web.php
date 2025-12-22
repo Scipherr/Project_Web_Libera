@@ -8,32 +8,27 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\Auth\AdminAuthController;
 use Illuminate\Support\Facades\Route;
 
-
-
-
-Route::get('/', [PostController::class,'index'])
-    ->middleware(['auth', 'verified']) // <--- Add this
-    ->name('dashboard');
+Route::get('/', function () {
+    return view('welcome');
+});
 
 
 Route::get('/@{user:username}',[PublicProfileController::class,'show'])->name('profile.show');
-Route::get('/@{username}/{post:slug}',[PostController::class,'show'])->name('post.show');
 
 
-// POST, GUEST & USER ETC (Authenticated actions)
+// POST, GUEST & USER ETC
 Route::middleware(['auth','verified']) ->group(function () {
-    
-   Route::get('/', [PostController::class,'index'])->name('dashboard');
+Route::get('/', [PostController::class,'index'])->name('dashboard');
+Route::get('/post/create', [PostController::class,'create'])->name('post.create');
+Route::post('/post/create', [PostController::class,'store'])->name('post.store');
+Route::get('/@{username}/{post:slug}',[PostController::class,'show'])->name('post.show');
+Route ::post('/follow/{user}',[FollowerController::class,'followUnfollow'])->name('follow');
 
-    Route::get('/post/create', [PostController::class,'create'])->name('post.create');
-    Route::post('/post/create', [PostController::class,'store'])->name('post.store');
-    Route::get('/post/{post}/edit', [PostController::class, 'edit'])->name('post.edit');
-    Route::patch('/post/{post}', [PostController::class, 'update'])->name('post.update');
-    Route::delete('/post/{post}', [PostController::class, 'destroy'])->name('post.destroy');
-   
-    Route::post('/follow/{user}',[FollowerController::class,'followUnfollow'])->name('follow');
 });
-
+// NEW ROUTES FOR EDIT/DELETE
+Route::get('/post/{post}/edit', [PostController::class, 'edit'])->name('post.edit');
+Route::patch('/post/{post}', [PostController::class, 'update'])->name('post.update');
+Route::delete('/post/{post}', [PostController::class, 'destroy'])->name('post.destroy');
 // ADMIN 
 Route::prefix('admin')->group(function () {
     Route::middleware('guest:admin')->group(function () {
@@ -47,6 +42,8 @@ Route::prefix('admin')->group(function () {
         Route::post('logout', [AdminAuthController::class, 'destroy'])->name('admin.logout');
     });
 });
+
+
 
 // USER PROFILE
 Route::middleware('auth')->group(function () {

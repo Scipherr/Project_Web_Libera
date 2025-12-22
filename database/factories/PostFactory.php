@@ -15,17 +15,18 @@ class PostFactory extends Factory
      *
      * @return array<string, mixed>
      */
-   public function definition(): array
-{
-    $title = $this->faker->sentence(); // Changed from fake()
-    return [
-        'image' => $this->faker->imageUrl(), // Changed from fake()
-        'title' => $title,
-        'slug' => \Illuminate\Support\Str::slug($title),
-        'content' => $this->faker->paragraphs(5, true), // Changed from fake()
-        'category_id' => Category::inRandomOrder()->first()->id,
-        'user_id' => 1,
-        'published_at' => $this->faker->optional()->dateTime(), // Changed from fake()
-    ];
-}
+    public function definition(): array
+    {
+        $title = fake()->sentence();
+        return [
+            'image' => fake()->imageUrl(),
+            'title' => $title,
+            'slug' => \Illuminate\Support\Str::slug($title),
+            'content' => fake()->paragraphs(5, true),
+            'category_id' => Category::inRandomOrder()->first()->id,
+            'user_id' => 1,
+            'published_at' => fake()->optional()->dateTime(),
+
+        ];
+    }
 }
