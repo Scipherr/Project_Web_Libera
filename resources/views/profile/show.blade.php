@@ -2,41 +2,50 @@
     <div class="py-12 bg-gray-50/50 min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                {{-- LEFT COLUMN: POSTS --}}
                 <div class="lg:col-span-2 space-y-6">
                     <div class="flex items-center justify-between px-2">
                         <h2 class="text-xl font-bold text-gray-800">Recent Posts</h2>
                     </div>
 
                     <div class="space-y-6">
-                        <!--POST----------------------------------------------------------------------------------->
                         @forelse ($posts as $post)
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 transition hover:shadow-md relative">
-    
-                            <x-post-item :post="$post"></x-post-item>
+                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 transition hover:shadow-md relative">
+        
+                                <x-post-item :post="$post"></x-post-item>
 
-                            {{-- OWNER ACTIONS --}}
-                            @if(Auth::check() && Auth::id() === $user->id)
-                                <div class="mt-4 pt-4 border-t border-gray-100 flex gap-3 justify-end">
-                                    {{-- Edit Button --}}
-                                    <a href="{{ route('post.edit', $post->id) }}" 
-                                    class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition">
-                                    Edit
-                                    </a>
+                                {{-- OWNER ACTIONS --}}
+                                @if(Auth::check() && Auth::id() === $user->id)
+                                    <div class="mt-4 pt-4 border-t border-gray-100 flex gap-3 justify-end">
+                                        {{-- Edit Button --}}
+                                        <a href="{{ route('post.edit', $post->id) }}" 
+                                        class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition">
+                                        Edit
+                                        </a>
 
-                                    {{-- Delete Button --}}
-                                    <form action="{{ route('post.destroy', $post->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this post?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" 
-                                                class="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition">
-                                            Delete
-                                        </button>
-                                    </form>
-                                </div>
-                            @endif
-                        </div>
-                </div>
-                <!--USER----------------------------------------------------------------------------------->
+                                        {{-- Delete Button --}}
+                                        <form action="{{ route('post.destroy', $post->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this post?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" 
+                                                    class="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                @endif
+                            </div>
+                        @empty
+                            {{-- Empty State --}}
+                            <div class="text-center py-10 text-gray-500 bg-white rounded-2xl border border-gray-100 shadow-sm">
+                                No posts found.
+                            </div>
+                        @endforelse
+                    </div>
+                </div> {{-- Closing lg:col-span-2 --}}
+
+                {{-- RIGHT COLUMN: USER PROFILE --}}
                 <div class="lg:col-span-1">
                     <div class="sticky top-6">
                         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
@@ -92,8 +101,6 @@
                                 @endif
 
                             </x-follow-ctr>
-
-
 
                         </div>
                     </div>
