@@ -40,7 +40,7 @@
                     </div>
                 @endif
                 
-                <div class="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 bg-black/20">
+               <div class="absolute inset-0 flex flex-col items-center justify-center z-10 bg-black/40">
                      <a href="{{ route('post.show',['username' =>$post->user->username,'post'=>$post->slug]) }}">
                         <h2 class="text-3xl md:text-5xl font-extrabold text-white tracking-tight drop-shadow-xl hover:text-indigo-400 transition-colors">
                             {{ $post->title }}
