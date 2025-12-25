@@ -16,7 +16,7 @@ class Post extends Model
     'title',
     'content',
     'slug',
-    
+    'video',
     'user_id',
     'category_id',
     'published_at',

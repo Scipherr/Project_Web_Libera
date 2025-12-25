@@ -16,6 +16,12 @@
 
 
                     </div>
+                    <div class="mt-8">
+                        <x-input-label for="video" :value="__('Video (Optional)')" />
+                        <x-text-input id="video" class="block mt-1 w-full" type="file" name="video" accept="video/mp4,video/x-m4v,video/*" />
+                        <x-input-error :messages="$errors->get('video')" class="mt-2" />
+                        <p class="text-sm text-gray-500 mt-1">Video will be converted for better performance.</p>
+                    </div>
 
 
                     <!---Category--->

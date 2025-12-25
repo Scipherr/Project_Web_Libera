@@ -9,7 +9,7 @@ use App\Models\Category;
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-
+use App\Jobs\ConvertPostVideo;
 class PostController extends Controller
 {
     /**
@@ -50,16 +50,29 @@ class PostController extends Controller
    public function store(PostCreateRequest $request)
 {
     $data = $request->validated();
-    $image = $data['image'];
-    $imagePath = $image->store('posts', 'public');
-    $data['image'] = $imagePath;
+    
+    // Handle Image
+    if ($request->hasFile('image')) {
+        $data['image'] = $request->file('image')->store('posts', 'public');
+    }
+
     $data['user_id'] = Auth::id();
     $data['slug'] = Str::slug($data['title']);
 
-   
+    // Handle Video (Upload Raw first)
+    if ($request->hasFile('video')) {
+        // Store in a temp folder inside public
+        $data['video'] = $request->file('video')->store('posts/temp', 'public');
+    }
 
-    Post::create($data);
-    return redirect()->route('dashboard');
+    $post = Post::create($data);
+
+    // Dispatch the conversion job if a video exists
+    if (!empty($data['video'])) {
+        ConvertPostVideo::dispatch($post);
+    }
+
+    return redirect()->route('dashboard')->with('status', 'Post created! Video is processing...');
 }
     
     public function show(string $username,Post $post)

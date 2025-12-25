@@ -31,8 +31,22 @@
             </div>
               <!--Post image-->
                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-8">
-                <img src="{{ $post->pfpurl() }}" alt="{{ $post->title }}" class="w-full">
+                                @if ($post->image)
+                    <div class="mb-8 rounded-xl overflow-hidden shadow-lg">
+                        <img src="{{ $post->pfpurl() }}" ... >
+                    </div>
+                @endif
+                @if ($post->video)
+                    <div class="mb-8 rounded-xl overflow-hidden shadow-lg bg-black">
+                        <video controls class="w-full h-auto" preload="metadata">
+                            <source src="{{ Storage::url($post->video) }}" type="video/webm">
+                            <source src="{{ Storage::url($post->video) }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                @endif
                 <!--Post content-->
+
                 <div class="mt-4 prose max-w-none">
                     {!! $post->content !!}
                 </div>

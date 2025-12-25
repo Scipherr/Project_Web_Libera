@@ -20,13 +20,14 @@ class PostCreateRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
-    {
-        return [
-              'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+{
+    return [
+        'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'], // Made nullable if video is optional
+        'video' => ['nullable', 'mimes:mp4,mov,ogg,qt', 'max:20000'], // Max 20MB (adjust as needed)
         'title' => 'required',
         'content' => 'required',
-        'category_id' => ['required', 'exists:categories,id'], // Fixed spelling here
+        'category_id' => ['required', 'exists:categories,id'],
         'published_at' => ['nullable', 'datetime'],
-        ];
-    }
+    ];
+}
 }
