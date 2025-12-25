@@ -5,7 +5,7 @@
             
             @if(request()->page <= 1 && !request('category'))
              <div class="bg-gray-50 overflow-hidden shadow-sm sm:rounded-lg">
-                        LATEST POSa
+                        Latest Posts
             </div>
                 <x-latest-posts-carousel :posts="$carouselPosts" />
             @endif
